@@ -38,32 +38,33 @@ public class IndexController {
     @ResponseBody
     public DataResponse<Customer> pojo(
             Customer customer,
-            @RequestParam(defaultValue="1",value="page") String page,
-            @RequestParam(defaultValue="10",value="rows") String rows) {
+            @RequestParam(defaultValue = "1", value = "page") String page,
+            @RequestParam(defaultValue = "10", value = "rows") String rows) {
 
+        int totalRecord = 80;
         int records;     //总记录数
         int totalPages;  //总页数
         int pageSize = StringUtils.isEmpty(rows) ? 10 : Integer.valueOf(rows);  //每页显示记录数
         int currPage = StringUtils.isEmpty(page) ? 1 : Integer.valueOf(page); //当前页码
+        int totalPage = totalRecord % Integer.parseInt(rows) == 0 ? totalRecord
+                / Integer.parseInt(rows) : totalRecord / Integer.parseInt(rows);
         DataResponse response = new DataResponse<Customer>();
 
         try {
             records = 10;
-            totalPages = (records + pageSize -1) / pageSize;
-            int start = pageSize * (currPage - 1) + 1;
-            start = (start < 0) ? 0 : start;
-            int stop = currPage * pageSize;
+
             response.setData(String.valueOf(records));
-            response.setData(String.valueOf(totalPages));
+            response.setData(String.valueOf(totalPage));
             response.setData(String.valueOf(currPage));
-            for (int i = 0; i < 25 ; i++) {
-                dataList.add(new Customer(i,"z3",20+i));
+            for (int i = 0; i < 25; i++) {
+                dataList.add(new Customer(i, "z3", 20 + i));
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return response;
     }
+
     @RequestMapping(value = {"test"})
     @ResponseBody
     public JqgridListForm controllerName(
@@ -72,7 +73,7 @@ public class IndexController {
             @RequestParam(value = "sidx", required = false) String sidx,
             @RequestParam(value = "sord", required = false) String sord,
             @RequestParam(value = "searchField", required = false) String searchField) {
-        // 当前页码
+       /* // 当前页码
         int pageNo = Integer.parseInt(page);
         // 显示条数，默认10条
         int size = 10;
@@ -82,8 +83,23 @@ public class IndexController {
         List list = new ArrayList();
         for (int i = 0; i <25 ; i++) {
             list.add(new Customer(i,"z"+i+"",20+i));
-        }
+        }*/
+        int totalRecord = 25; // 总记录数(应根据数据库取得，在此只是模拟)
+        int totalPage = totalRecord % Integer.parseInt(rows) == 0 ? totalRecord
+                / Integer.parseInt(rows) : totalRecord / Integer.parseInt(rows)
+                + 1;
+        try {
+            int index = (Integer.parseInt(page) - 1) * Integer.parseInt(rows); // 开始记录数
+            int pageSize = Integer.parseInt(rows);
+        } catch (Exception ex) {
 
-        return new JqgridListForm(1,3,25,list);
+        }
+        ;
+        List list = new ArrayList();
+        for (int i = 0; i < 25; i++) {
+            list.add(new Customer(i, "z" + i + "", 20 + i));
+        }
+        return new JqgridListForm(Integer.getInteger(page), totalPage, totalRecord, list);
+
     }
 }

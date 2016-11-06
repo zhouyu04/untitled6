@@ -14,7 +14,7 @@ public class JqgridListForm implements Serializable {
     /* 总页数 */
     private int total;
     /* 总计录数  */
-    private long records;
+    private long rows;
 
     private List<?> formList;
 
@@ -24,7 +24,7 @@ public class JqgridListForm implements Serializable {
     public JqgridListForm(int page, int total, long records, List<?> formList) {
         this.page = page;
         this.total = total;
-        this.records = records;
+        this.rows = records;
         this.formList = formList;
     }
 
@@ -41,10 +41,10 @@ public class JqgridListForm implements Serializable {
         this.total = total;
     }
     public long getRecords() {
-        return records;
+        return rows;
     }
     public void setRecords(long records) {
-        this.records = records;
+        this.rows = records;
     }
     public List<?> getFormList() {
         return formList;
